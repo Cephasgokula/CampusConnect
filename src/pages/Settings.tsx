@@ -60,7 +60,7 @@ const Settings = () => {
     dataUsage: "normal"
   });
 
-  const handleSettingChange = (category: string, setting: string, value: any) => {
+  const handleSettingChange = (category: string, setting: string, value: string | boolean) => {
     setSettings(prev => ({
       ...prev,
       [setting]: value
