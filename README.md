@@ -1,27 +1,62 @@
-# Campus Event Management System
+# Campus Event Management System (CEMS)
 
-A full-stack web application to manage campus events, allowing admins to create and manage events and students to view and register for them.
+Full-stack Campus Event Management System built with 2024 MERN stack and shadcn/ui.
 
-## How to Clone and Run the Project
+## Tech Stack
+- Backend: Node.js 20, Express 4, MongoDB 7, Mongoose 8, JWT, bcryptjs, Nodemailer, Multer, Cloudinary
+- Frontend: React 18, Vite 5, TypeScript, Tailwind CSS, shadcn/ui, React Router 6, Axios, Formik + Yup
 
-### Prerequisites
-- [Node.js and npm](https://nodejs.org/) installed
+## Project Structure
+- `backend` - REST API and business logic
+- `frontend` - React client app
 
-### Steps
+## Setup
+1. Install dependencies:
+```bash
+npm --prefix backend install
+npm --prefix frontend install
+```
+2. Create env files:
+- `backend/.env` from `backend/.env.example`
+- `frontend/.env` from `frontend/.env.example`
+3. Run apps:
+```bash
+npm run dev:backend
+npm run dev:frontend
+```
 
-```sh
-# Step 1: Clone the repository
-git clone https://github.com/Cephasgokula/<YOUR_PROJECT_NAME>.git
+Backend: `http://localhost:5000`  
+Frontend: `http://localhost:5173`
 
-# Step 2: Navigate to the project directory
-cd <YOUR_PROJECT_NAME>
+## Environment
+- Backend variables: `backend/.env.example`
+- Frontend variables: `frontend/.env.example`
 
-# Step 3: Install dependencies
-npm install
+## API Base
+- Health: `GET /api/health`
+- Auth: `/api/auth/*`
+- Events: `/api/events/*`
+- Registrations: `/api/registrations/*`
+- Public signup always creates `student` role.
+- Admin role is seeded or assigned via admin-only promotion endpoint (`PUT /api/auth/promote/:userId`).
 
-# Step 4: Start the development server
-npm run dev
+## Default Accounts (Seed)
+Run:
+```bash
+npm run seed
+```
+Seeded admin credentials:
+- Email: `admin@cems.local`
+- Password: `Admin@123`
 
-![Screenshot 2025-05-24 155948](https://github.com/user-attachments/assets/1af87fbe-c259-4bff-9455-5952a7e04465)
+Important: rotate/remove default credentials in production.
 
+## Deployment
+- Backend: Render (root: `backend`)
+- Frontend: Vercel (root: `frontend`)
+- Set backend CORS `CLIENT_URL` to deployed frontend URL.
 
+## Production Security Notes
+1. Change `DEFAULT_ADMIN_PASSWORD` and remove default credentials.
+2. Rotate `JWT_SECRET`.
+3. Restrict CORS to production frontend domain only.
