@@ -11,7 +11,7 @@ export interface User {
 }
 
 export interface EventItem {
-  _id: string;
+  id: string;
   title: string;
   description: string;
   category: string;
@@ -22,8 +22,8 @@ export interface EventItem {
   registeredCount: number;
   banner?: string;
   tags: string[];
-  isActive: boolean;
-  isCancelled: boolean;
+  active: boolean;
+  cancelled: boolean;
   cancelReason?: string;
   registrationDeadline?: string;
 }
