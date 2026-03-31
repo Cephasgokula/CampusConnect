@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { exportParticipantsCsv, fetchParticipants, markAttendance } from '@/api/registrations';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Download, CheckCircle } from 'lucide-react';
 import type { Registration } from '@/types';
 
 export const EventParticipantsPage = () => {
@@ -26,44 +27,54 @@ export const EventParticipantsPage = () => {
   }, [id]);
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle>Event Participants</CardTitle>
-          <Button
-            variant="outline"
-            onClick={async () => {
-              if (!id) return;
-              await exportParticipantsCsv(id);
-            }}
-          >
-            Export CSV
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent>
-        {error && <p className="mb-3 text-sm text-danger">{error}</p>}
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-headline-lg text-on-surface">Event Participants</h1>
+        <Button
+          variant="outline"
+          onClick={async () => {
+            if (!id) return;
+            await exportParticipantsCsv(id);
+          }}
+        >
+          <Download className="mr-2 h-4 w-4" />
+          Export CSV
+        </Button>
+      </div>
+
+      {error && (
+        <p className="rounded-lg bg-error-container px-4 py-3 text-sm text-error">{error}</p>
+      )}
+
+      <div className="rounded-xl bg-surface-container-lowest p-6 shadow-ambient">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[760px] text-sm">
             <thead>
-              <tr className="border-b border-border text-left text-slate-600">
-                <th className="p-2">Name</th>
-                <th className="p-2">Email</th>
-                <th className="p-2">Roll Number</th>
-                <th className="p-2">Department</th>
-                <th className="p-2">Status</th>
-                <th className="p-2">Action</th>
+              <tr className="text-left">
+                <th className="pb-4 text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Name</th>
+                <th className="pb-4 text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Email</th>
+                <th className="pb-4 text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Roll Number</th>
+                <th className="pb-4 text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Department</th>
+                <th className="pb-4 text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold">Status</th>
+                <th className="pb-4 text-label-sm uppercase tracking-wider text-on-surface-variant font-semibold text-right">Action</th>
               </tr>
             </thead>
             <tbody>
-              {rows.map((row) => (
-                <tr key={row._id} className="border-b border-border">
-                  <td className="p-2">{row.student?.name || '-'}</td>
-                  <td className="p-2">{row.student?.email || '-'}</td>
-                  <td className="p-2">{row.student?.rollNumber || '-'}</td>
-                  <td className="p-2">{row.student?.department || '-'}</td>
-                  <td className="p-2">{row.status}</td>
-                  <td className="p-2">
+              {rows.map((row, idx) => (
+                <tr
+                  key={row._id}
+                  className={idx % 2 === 0 ? '' : 'bg-surface-container-low/50'}
+                >
+                  <td className="py-4 pr-4 font-medium text-on-surface">{row.student?.name || '-'}</td>
+                  <td className="py-4 pr-4 text-on-surface-variant">{row.student?.email || '-'}</td>
+                  <td className="py-4 pr-4 text-on-surface-variant">{row.student?.rollNumber || '-'}</td>
+                  <td className="py-4 pr-4 text-on-surface-variant">{row.student?.department || '-'}</td>
+                  <td className="py-4 pr-4">
+                    <Badge variant={row.status === 'attended' ? 'success' : row.status === 'cancelled' ? 'error' : 'default'}>
+                      {row.status}
+                    </Badge>
+                  </td>
+                  <td className="py-4 text-right">
                     <Button
                       variant="outline"
                       disabled={row.status === 'attended'}
@@ -72,6 +83,7 @@ export const EventParticipantsPage = () => {
                         await load();
                       }}
                     >
+                      <CheckCircle className="mr-1.5 h-4 w-4" />
                       Mark Attended
                     </Button>
                   </td>
@@ -79,7 +91,7 @@ export const EventParticipantsPage = () => {
               ))}
               {rows.length === 0 && (
                 <tr>
-                  <td className="p-2 text-slate-500" colSpan={6}>
+                  <td colSpan={6} className="py-8 text-center text-on-surface-variant">
                     No participants found.
                   </td>
                 </tr>
@@ -87,8 +99,8 @@ export const EventParticipantsPage = () => {
             </tbody>
           </table>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 

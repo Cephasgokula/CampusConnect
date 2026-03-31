@@ -4,7 +4,6 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { createEvent, fetchAdminEvent, updateEvent } from '@/api/events';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
@@ -78,40 +77,66 @@ export const EventFormPage = () => {
   }, [id]);
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{id ? 'Edit Event' : 'Create Event'}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form className="grid gap-3 md:grid-cols-2" onSubmit={formik.handleSubmit}>
+    <div className="space-y-6">
+      <h1 className="text-headline-lg text-on-surface">{id ? 'Edit Event' : 'Create Event'}</h1>
+
+      <div className="rounded-xl bg-surface-container-lowest p-8 shadow-ambient">
+        <form className="grid gap-5 md:grid-cols-2" onSubmit={formik.handleSubmit}>
           <div className="md:col-span-2">
+            <p className="mb-2 text-label-sm uppercase tracking-wider text-on-surface-variant">Event Title</p>
             <Input name="title" placeholder="Event title" value={formik.values.title} onChange={formik.handleChange} />
           </div>
           <div className="md:col-span-2">
+            <p className="mb-2 text-label-sm uppercase tracking-wider text-on-surface-variant">Description</p>
             <Textarea
               name="description"
-              placeholder="Description"
+              placeholder="Event description"
               value={formik.values.description}
               onChange={formik.handleChange}
             />
           </div>
-          <select className="h-10 rounded-md border border-border bg-white px-3" name="category" value={formik.values.category} onChange={formik.handleChange}>
-            <option value="workshop">Workshop</option>
-            <option value="seminar">Seminar</option>
-            <option value="cultural">Cultural</option>
-            <option value="sports">Sports</option>
-            <option value="technical">Technical</option>
-            <option value="other">Other</option>
-          </select>
-          <Input name="venue" placeholder="Venue" value={formik.values.venue} onChange={formik.handleChange} />
-          <Input name="date" type="datetime-local" value={formik.values.date} onChange={formik.handleChange} />
-          <Input name="endDate" type="datetime-local" value={formik.values.endDate} onChange={formik.handleChange} />
-          <Input name="capacity" type="number" value={formik.values.capacity} onChange={formik.handleChange} />
-          <Input name="registrationDeadline" type="datetime-local" value={formik.values.registrationDeadline} onChange={formik.handleChange} />
+          <div>
+            <p className="mb-2 text-label-sm uppercase tracking-wider text-on-surface-variant">Category</p>
+            <select
+              className="h-11 w-full rounded-[8px] bg-surface-container-lowest px-4 text-body-md text-on-surface outline-none ghost-border focus-visible:ring-2 focus-visible:ring-secondary-fixed-dim"
+              name="category"
+              value={formik.values.category}
+              onChange={formik.handleChange}
+            >
+              <option value="workshop">Workshop</option>
+              <option value="seminar">Seminar</option>
+              <option value="cultural">Cultural</option>
+              <option value="sports">Sports</option>
+              <option value="technical">Technical</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div>
+            <p className="mb-2 text-label-sm uppercase tracking-wider text-on-surface-variant">Venue</p>
+            <Input name="venue" placeholder="Venue" value={formik.values.venue} onChange={formik.handleChange} />
+          </div>
+          <div>
+            <p className="mb-2 text-label-sm uppercase tracking-wider text-on-surface-variant">Start Date</p>
+            <Input name="date" type="datetime-local" value={formik.values.date} onChange={formik.handleChange} />
+          </div>
+          <div>
+            <p className="mb-2 text-label-sm uppercase tracking-wider text-on-surface-variant">End Date</p>
+            <Input name="endDate" type="datetime-local" value={formik.values.endDate} onChange={formik.handleChange} />
+          </div>
+          <div>
+            <p className="mb-2 text-label-sm uppercase tracking-wider text-on-surface-variant">Capacity</p>
+            <Input name="capacity" type="number" value={formik.values.capacity} onChange={formik.handleChange} />
+          </div>
+          <div>
+            <p className="mb-2 text-label-sm uppercase tracking-wider text-on-surface-variant">Registration Deadline</p>
+            <Input name="registrationDeadline" type="datetime-local" value={formik.values.registrationDeadline} onChange={formik.handleChange} />
+          </div>
           <div className="md:col-span-2">
+            <p className="mb-2 text-label-sm uppercase tracking-wider text-on-surface-variant">Tags</p>
             <Input name="tags" placeholder="Tags (comma separated)" value={formik.values.tags} onChange={formik.handleChange} />
           </div>
           <div className="md:col-span-2">
+            <p className="mb-2 text-label-sm uppercase tracking-wider text-on-surface-variant">Banner Image</p>
             <Input
               type="file"
               accept="image/*"
@@ -119,12 +144,14 @@ export const EventFormPage = () => {
             />
           </div>
 
-          {error && <p className="md:col-span-2 text-sm text-danger">{error}</p>}
+          {error && (
+            <p className="md:col-span-2 rounded-lg bg-error-container px-4 py-3 text-sm text-error">{error}</p>
+          )}
           <div className="md:col-span-2">
             <Button type="submit">{id ? 'Update Event' : 'Create Event'}</Button>
           </div>
         </form>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };

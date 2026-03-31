@@ -6,7 +6,7 @@ import { registerUser } from '@/api/auth';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Mail, Lock, User, Hash, Building } from 'lucide-react';
 
 const schema = Yup.object({
   name: Yup.string().required('Required'),
@@ -42,54 +42,128 @@ export const RegisterPage = () => {
   });
 
   return (
-    <div className="mx-auto max-w-md">
-      <Card>
-        <CardHeader>
-          <CardTitle>Create Student Account</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form className="space-y-3" onSubmit={formik.handleSubmit}>
-            <Input name="name" placeholder="Full name" value={formik.values.name} onChange={formik.handleChange} />
-            {formik.touched.name && formik.errors.name && <p className="text-xs text-danger">{formik.errors.name}</p>}
+    <div className="flex min-h-[70vh] items-center justify-center">
+      <div className="w-full max-w-md">
+        <div className="rounded-xl bg-surface-container-lowest p-8 shadow-ambient-lg">
+          <div className="text-center">
+            <h1 className="text-headline-lg text-on-surface">Join the Pulse</h1>
+            <p className="mt-2 text-body-md text-on-surface-variant">
+              Curation and community for campus leaders.
+            </p>
+          </div>
 
-            <Input name="email" placeholder="Email" value={formik.values.email} onChange={formik.handleChange} />
-            {formik.touched.email && formik.errors.email && <p className="text-xs text-danger">{formik.errors.email}</p>}
-
-            <Input
-              name="password"
-              type="password"
-              placeholder="Password"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-            />
-            {formik.touched.password && formik.errors.password && <p className="text-xs text-danger">{formik.errors.password}</p>}
-
-            <Input
-              name="rollNumber"
-              placeholder="Roll number (optional)"
-              value={formik.values.rollNumber}
-              onChange={formik.handleChange}
-            />
-            <Input
-              name="department"
-              placeholder="Department (optional)"
-              value={formik.values.department}
-              onChange={formik.handleChange}
-            />
-
-            {error && <p className="text-sm text-danger">{error}</p>}
-            <Button className="w-full" type="submit">
+          {/* Login / Register toggle */}
+          <div className="mt-6 flex rounded-lg bg-surface-container-low p-1">
+            <Link
+              to="/login"
+              className="flex-1 rounded-md py-2 text-center text-sm font-medium text-on-surface-variant spring-hover hover:text-on-surface"
+            >
+              Login
+            </Link>
+            <div className="flex-1 rounded-md bg-surface-container-lowest py-2 text-center text-sm font-semibold text-on-surface shadow-sm">
               Register
+            </div>
+          </div>
+
+          <form className="mt-6 space-y-5" onSubmit={formik.handleSubmit}>
+            <div>
+              <p className="mb-2 text-label-sm uppercase tracking-wider text-on-surface-variant">Full Name</p>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-variant/50" />
+                <Input
+                  name="name"
+                  placeholder="Your full name"
+                  value={formik.values.name}
+                  onChange={formik.handleChange}
+                  className="pl-10"
+                />
+              </div>
+              {formik.touched.name && formik.errors.name && (
+                <p className="mt-1 text-xs text-error">{formik.errors.name}</p>
+              )}
+            </div>
+
+            <div>
+              <p className="mb-2 text-label-sm uppercase tracking-wider text-on-surface-variant">Email Address</p>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-variant/50" />
+                <Input
+                  name="email"
+                  placeholder="name@university.edu"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  className="pl-10"
+                />
+              </div>
+              {formik.touched.email && formik.errors.email && (
+                <p className="mt-1 text-xs text-error">{formik.errors.email}</p>
+              )}
+            </div>
+
+            <div>
+              <p className="mb-2 text-label-sm uppercase tracking-wider text-on-surface-variant">Password</p>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-variant/50" />
+                <Input
+                  name="password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  className="pl-10"
+                />
+              </div>
+              {formik.touched.password && formik.errors.password && (
+                <p className="mt-1 text-xs text-error">{formik.errors.password}</p>
+              )}
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <p className="mb-2 text-label-sm uppercase tracking-wider text-on-surface-variant">Roll Number</p>
+                <div className="relative">
+                  <Hash className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-variant/50" />
+                  <Input
+                    name="rollNumber"
+                    placeholder="Optional"
+                    value={formik.values.rollNumber}
+                    onChange={formik.handleChange}
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+              <div>
+                <p className="mb-2 text-label-sm uppercase tracking-wider text-on-surface-variant">Department</p>
+                <div className="relative">
+                  <Building className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-variant/50" />
+                  <Input
+                    name="department"
+                    placeholder="Optional"
+                    value={formik.values.department}
+                    onChange={formik.handleChange}
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {error && (
+              <p className="rounded-lg bg-error-container px-4 py-3 text-sm text-error">{error}</p>
+            )}
+
+            <Button className="w-full" type="submit">
+              Create Account
             </Button>
           </form>
-          <p className="mt-3 text-sm text-slate-600">
+
+          <p className="mt-4 text-center text-body-md text-on-surface-variant">
             Already have an account?{' '}
-            <Link className="font-medium text-secondary" to="/login">
+            <Link className="font-semibold text-secondary spring-hover hover:underline" to="/login">
               Login
             </Link>
           </p>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 };
